@@ -1,7 +1,7 @@
 <template>
     <div class="c-div">
         <div class="i-div"> 
-            <img class="i-g" src="../img/001.jpg">      
+            <img class="i-g" src="../company_imgs/00002.jpg">      
         </div>
         <div class="info-div">
             <dl>
@@ -23,7 +23,13 @@
    {
        height: 120px; 
        width: 180px; 
-       overflow: hidden;     
+       overflow:hidden;     
+   }
+   .i-g
+   {
+      width: 100%;
+      height: 100%;
+
    }
    .info-div dd
    {

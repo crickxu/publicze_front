@@ -1,6 +1,14 @@
 <template>
 <div id="app-f">
     <div class="top_">
+      <el-row> 
+        <el-col :span="4" class="el-s">
+          <el-button type="primary" class="enterprise_in" @click ="initEnterprise()"><i class="fa fa-car"></i>发布公告</el-button>
+        </el-col>
+        <el-col :span="4" class="el-s">
+          <el-button type="primary" class="enterprise_in" @click ="initEnterprise()"><i class="fa fa-car"></i>企业入驻</el-button>
+        </el-col>
+      </el-row>     
     </div>
     <div class="main_">
         <div class="adv_">
@@ -60,7 +68,7 @@
               <template v-slot="{ node, data}">
                 <!--<span class="custom-node leaf el-icon-share">{{node.label}}</span>-->
                 
-                <span class="custom-node leaf el-icon-share" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'profession')">{{node.label}}</span>
+                <span class="custom-node leaf" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'profession')">{{node.label}}</span>
                 <span v-else class="custom-node noLeaf" @mouseenter="mouseenterSubcatprofession(node,'profession')">{{node.label}}</span> 
                 
                 </template>
@@ -88,7 +96,6 @@
 <script>
    import list from './list'
    import axios from 'axios';
-
    export default {
     data() {
     return {
@@ -98,8 +105,6 @@
         releasetypes: null,
         parentregion: null,
         parentprofession: null,
-        pselectedOptions:[],
-        selectedOptions:[],
         poptions:[],
         options:[],
         images: [{id:1,url:require("../img/001.jpg")},{id:2,url:require("../img/002.jpg")},{id:3,url:require("../img/003.jpg")}]
@@ -110,10 +115,13 @@
      this.fetchData(),
      this.getParentRegion(),
      this.getProfession()
-     this.nodetest()
   },
   methods:
   {
+    initEnterprise()
+    {
+      this.$router.push('regist');
+    },
     professionpanelleave(title)
     {
       let all_node = document.querySelectorAll('.el-cascader-menu');
@@ -317,10 +325,18 @@
 
 </script>
 <style>
+    .enterprise_in
+    {
+       height: 32px;
+       width: 100px;
+       justify-content: center;
+    }
     .cascader-panel
     {
       position: absolute;
       height: 400px;
+      margin-bottom: 0px;
+      margin-right: 0px;
       background-color: beige;
     }
     .cascader-panel.region
@@ -330,6 +346,8 @@
     .el-cascader-menu__wrap
     {
       height: 100%;
+      margin-bottom: 0px;
+      margin-right: 0px;
     }
     .custom-node {
         padding: 0px 0px;
@@ -376,6 +394,11 @@
         display: flex;
         margin-left: 0px;
     }
+    .enterprise_in
+    {
+      display: flex;
+      margin-right: 0px;
+    }
     .el-d
     {
         display:flex;
@@ -387,22 +410,21 @@
     }
     .d-left
     {
-        width: 20%;
+        width: 22%;
         height: 100%;
-        overflow: hidden;
-        background-color: aliceblue;
+        background-color: beige;
     }
     .t_region
     {
        width: 100%;
        height: 30px;
-       background-color: lightslategray;
+       background-color: rgb(233, 206, 131);
     }
     .b_profession
     {
        width: 100%;
        height: 30px;
-       background-color: lightslategray;
+       background-color: rgb(233, 206, 131);
     }
     .d-el-cascader-panel
     {
@@ -412,7 +434,7 @@
     }
     .d-center
     {
-        width: 55%;
+        width: 53%;
         height: 100%;
     }
     .d-right
