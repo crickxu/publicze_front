@@ -3,8 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import index from '@/components/index'
 import regist from '@/components/Regist'
-import picture from '@/components/picture'
-import video from '@/components/video'
+import companyInfo from '@/components/companyInfo'
 
 Vue.use(Router)
 
@@ -21,9 +20,9 @@ export default new Router({
       component: regist
     },
     {
-      path: '/video',
-      name: 'video',
-      component: video
+      path: '/companyInfo',
+      name: 'companyInfo',
+      component: companyInfo
     },
   ]
 })

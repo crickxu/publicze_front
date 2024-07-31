@@ -27,7 +27,7 @@
         </div>
         <el-row class="el-row-info a">
             <el-col :span="12">
-              <div class="div-l company_name"><span>公司名称</span></div>
+              <div class="div-l company_name"><span><i class="fa fa-plus-circle"></i>公司名称</span></div>
               <div>
                 <el-input class="input company_name" v-model="company_name" placeholder="请输入公司名称">
                 </el-input>
@@ -35,7 +35,7 @@
             
             </el-col>
             <el-col :span="12">
-              <div class="div-l credit_code"><span>统一信用代码</span></div>
+              <div class="div-l credit_code"><span><i class="fa fa-plus-circle"></i>统一信用代码</span></div>
               <div>
                 <el-input class="input credit_code" v-model="credit_code" placeholder="请输入统一信用代码"></el-input>
               </div>
@@ -43,7 +43,7 @@
           </el-row>
           <el-row class="el-row-info b">
             <el-col :span="12">
-              <div class="div-l nature"><span>企业类型</span></div>
+              <div class="div-l nature"><span><i class="fa fa-plus-circle"></i>企业类型</span></div>
               <div>
                 <el-select class="el-select nature" v-model="nature_selected" placeholder="国企">
                   <el-option v-for="item in natures" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -51,7 +51,7 @@
               </div>
             </el-col>
             <el-col :span="12">
-              <div class="div-l scale"><span>企业规模</span></div>
+              <div class="div-l scale"><span><i class="fa fa-plus-circle"></i>企业规模</span></div>
               <div>
                 <el-input-number class="input scale" v-model="scale" placeholder=""></el-input-number>
               </div>
@@ -59,7 +59,7 @@
           </el-row>
           <el-row class="el-row-info c">
             <el-col :span="12">
-              <div class="div-l region"><span>企业所在省</span></div>
+              <div class="div-l region"><span><i class="fa fa-plus-circle"></i>企业所在省</span></div>
               <div>
                 <el-select class="el-select region" v-model="region_selected" placeholder="" @change="fillcity">
                   <el-option v-for="item in regions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -67,7 +67,7 @@
               </div>
             </el-col>
             <el-col :span="12">
-              <div class="div-l city"><span>企业所在市</span></div>
+              <div class="div-l city"><span><i class="fa fa-plus-circle"></i>企业所在市</span></div>
               <div>
                 <el-select class="el-select city" v-model="city_selected" placeholder="" @change="updateFun">
                   <el-option v-for="item in citys" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -77,19 +77,19 @@
           </el-row>
           <el-row class="el-row-info d">
             <el-col :span="8">
-              <div class="div-l contact"><span>具体地址</span></div>
+              <div class="div-l contact"><span><i class="fa fa-address-card-o"></i>具体地址</span></div>
               <div>
                 <el-input class="input contact" v-model="contact" placeholder=""></el-input>
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="div-l mobile_num"><span>联系号码</span></div>
+              <div class="div-l mobile_num"><span><i class="fa fa-phone-square"></i>联系号码</span></div>
               <div>
                 <el-input class="input mobile_num" v-model="mobile_num" placeholder=""></el-input>
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="div-l event_type"><span>发布类型</span></div>
+              <div class="div-l event_type"><span><i class="fa fa-plus-circle"></i>发布类型</span></div>
               <div>
                 <el-select class="el-select event_type" v-model="event_selected" placeholder="">
                   <el-option v-for="item in event_types" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -99,7 +99,7 @@
           </el-row>
           <el-row class="el-row-info c">
             <el-col :span="8">
-              <div class="div-l one_profession"><span>一级行业</span></div>
+              <div class="div-l one_profession"><span><i class="fa fa-plus-circle"></i>一级行业</span></div>
               <div>
                 <el-select class="el-select one_profession" v-model="onepro_selected" placeholder="" @change="filltwopro">
                   <el-option v-for="item in one_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -107,7 +107,7 @@
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="div-l two_profession"><span>二级行业</span></div>
+              <div class="div-l two_profession"><span><i class="fa fa-plus-circle"></i>二级行业</span></div>
               <div>
                 <el-select class="el-select two_profession" v-model="twopro_selected" placeholder="" @change="fillthrpro">
                   <el-option v-for="item in two_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -115,7 +115,7 @@
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="div-l thr_profession"><span>三级行业</span></div>
+              <div class="div-l thr_profession"><span><i class="fa fa-plus-circle"></i>三级行业</span></div>
               <div>
                 <el-select class="el-select thr_profession" v-model="thrpro_selected" placeholder="">
                   <el-option v-for="item in thr_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -127,21 +127,20 @@
         <div>
           <div>
             <div class="title div">
-              <span>添加图片</span>
-              <el-button type="text"></el-button>
+              <el-button type="text" @click="addpic" class="add btn"><i class="fa fa-plus-circle"></i>添加图片</el-button>
             </div>
             <div class="content div">
-              <div class="picture_content div" id="p_content_div">
-                <input type="file" ref="fileInput" class="file input" id="f_input" accept="image/*" style="display: none;" @change="handleFileChange"/>
-                <img class="p_img" ref ="fileimg" :src="srcpath" id="file_img" @click="fileopen()" alt=""/>
-                <el-input class="input img" v-model="p_title" placeholder="请输入图片标题"></el-input>
+              <div class="picture_content div"  id="p_content_div">
+                <div v-for="(picinfo, index) in picinfos" :key="index">
+                  <pic :f_input="picinfo.finputId" :file_img="picinfo.imgId" @getInfo="getInfoFromChild"></pic>
+                 <!--<component :is='com' ></component> -->
+                </div>
               </div>
             </div>
           </div>
           <div>
             <div class="title div">
-              <span>添加视频</span>
-              <el-button type="text"></el-button>
+              <el-button type="text" class="add btn"><i class="fa fa-plus-circle"></i>添加视频</el-button>
             </div>
             <div class="content div">
               <div class="video_content div">
@@ -152,7 +151,7 @@
             </div>
           </div>
           <div>
-            <el-button type="primary" @click ="initEnterprise()" class="regist-btn el-icon-view">企业入驻</el-button>
+            <el-button type="primary" @click ="initEnterprise()" class="regist-btn">企业入驻</el-button>
           </div>
         </div>
       </div>
@@ -193,36 +192,50 @@ export default {
         one_professions: [],
         two_professions: [],
         thr_professions: [],
+        imgs: [],
+        imgs_pro: [],
+        videos: [],
+        videos_pro: [],
+        coms: [],
+        picinfos: []
     };
   },
   methods:
   {
-    fileopen()
+    getInfoFromChild(pfile,img_pro)
     {
-      document.getElementById('f_input').click();
+       this.imgs.push(pfile);
+       this.imgs_pro.push(img_pro);
     },
+    addpic()
+    {
+      //const moment = require('moment');
+      //const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      const timestamp = new Date().getTime();
+      let finputid = "finput"+timestamp;
+      let imgid = "img"+timestamp;
+      var info = 
+      {
+        finputId: finputid,
+        imgId: imgid
+      }
+      this.picinfos.push(info);
+      //this.coms.push('pic');
+    },
+
     filevideoopen()
     {
       document.getElementById('v_input').click();
     },
-    handleFileChange()
-    {
-       var pfile =  this.$refs.fileInput.files[0];
-       if(window.FileReader)
-       {
-        var reader = new FileReader();
-        reader.readAsDataURL(pfile);
-        reader.onload=function()
-        {
-          var p_img = document.getElementById('file_img');
-          p_img.src= this.result;
-          
-        }
-       }
-    },
     handleVideoFileChange()
     {
        var pfile =  this.$refs.videofileInput.files[0];
+       this.videos.push(pfile);
+       var video_pro ={
+        name: pfile.name,
+        discrip: this.v_title
+       }
+       this.videos_pro.push(video_pro);
        if(window.FileReader)
        {
         var reader = new FileReader();
@@ -283,7 +296,65 @@ export default {
     },
     initEnterprise()
     {
-      this.$router.push('regist');
+      axios.post('http://localhost:8093/company/addCompany',
+        {
+          
+            userNo: "",
+            name: this.company_name,
+            creditCode: this.credit_code,
+            natureId: this.nature_selected,
+            scale: this.scale,
+            provinceAddr: this.region_selected,
+            cityAddr: this.city_selected,
+            contact: this.contact,
+            introduction: this.con_introduct,
+            mobileNum: this.mobile_num,
+            eventType: this.event_selected,
+            industry: this.onepro_selected,
+            subIndustry: this.twopro_selected,
+            thrIndustry: this.thrpro_selected
+            
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+           }
+        }
+      ).then((res)=>{
+        const formData = new FormData();
+        for(let i=0;i<this.imgs.length;i++)
+        {
+          formData.append('uploadimg',this.imgs[i]);
+        }
+        for(let n=0;n<this.videos.length;n++)
+        {
+          formData.append('uploadvideo',this.videos[n])
+        }
+        formData.append('imgspro',JSON.stringify(this.imgs_pro));
+        
+        formData.append('videospro',JSON.stringify(this.videos_pro));
+        this.$confirm(this.videos_pro, 'title', {
+          confirmButtonText: 'confirm',
+          cancelButtonText: 'cancel',
+          type: 'warning'
+        }).then(() => {
+          
+        }).catch(() => {});
+        formData.append('companyNo','CP20240703010255');
+        axios.post('http://localhost:8093/file/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+       })
+        .then(response => {
+           console.log(response.data);
+        })
+        .catch(error => {
+           console.error("图片上传失败:"+error);
+        });
+      }).catch(err=>{
+        console.error("公司注入失败:"+err);
+      });
     },
     getParentRegion()
     {
@@ -469,11 +540,22 @@ export default {
     height: 40px;
     width: 100%;
     background-color: rgb(240, 236, 236);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .add.btn
+  {
+    font-size:14pt;
+  }
+  .title.span
+  {
+    margin-top: 10px;
   }
   .p_img
   {
     width: 250px;
-    height: 220px;
+    height: 200px;
   }
   .p_video
   {
@@ -482,20 +564,22 @@ export default {
   }
   .input.img
   {
-    width: 180px;
+    width: 200px;
   }
   .content.div
   {
     display:flex;
-    height: 200px;
     width: 100%;
     background-color: ivory;
   }
   .picture_content
   {
-    width: 280px;
-    height: 260px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 235px;
   }
+  
   .video_content
   {
     width: 220px;
