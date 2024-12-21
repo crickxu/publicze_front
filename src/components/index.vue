@@ -1,14 +1,14 @@
 <template>
 <div id="app-f">
     <div class="top_">
-      <el-row> 
-        <el-col :span="4" class="el-s">
-          <el-button type="primary" class="enterprise_in" @click ="initEnterprise()"><i class="fa fa-car"></i>发布公告</el-button>
-        </el-col>
-        <el-col :span="4" class="el-s">
-          <el-button type="primary" class="enterprise_in" @click ="initEnterprise()"><i class="fa fa-car"></i>企业入驻</el-button>
-        </el-col>
-      </el-row>     
+      <div class="top left div"></div>
+      <div class="top right div">
+        <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-user"></i>登录</el-button>
+        <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-user-plus"></i>注册</el-button>
+        <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-gear"></i>企业入驻</el-button>
+        <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-file-text"></i>发布公告</el-button>
+        
+      </div>
     </div>
     <div class="main_">
         <div class="adv_">
@@ -19,11 +19,11 @@
           </el-carousel>
         </div>
         <div class="menu_">
-            <el-row>
+            <el-row class="menu el-row">
               <el-col :span="12">
-                <el-menu active-text-color="" mode="horizontal" default-active="">
+                <el-menu class="title menu" active-text-color="#409EFF" mode="horizontal" default-active="0">
                     <template v-for="releasetype in releasetypes">
-                        <el-menu-item :index="releasetype.type">{{releasetype.typeName}}</el-menu-item>
+                        <el-menu-item class="menuitem" :index="releasetype.type">{{releasetype.typeName}}</el-menu-item>
                     </template>
                 </el-menu>
               </el-col>
@@ -38,7 +38,8 @@
         </div>
         <div class="center_">
            <div class="d-left">
-             <div class="t_region">地区</div>
+             <div class="t_region"></div>
+            
              <div class="d-el-cascader-panel region" @mouseleave="professionpanelleave('region')">
               <el-cascader-panel
                 class="cascader-panel region"
@@ -49,12 +50,14 @@
                 ref="r_cascader"
                 :props="{ expandTrigger: 'hover'}">
                 <template v-slot="{ node, data}">
-                  <span class="custom-node leaf el-icon-search" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'region')">{{node.label}}</span>
+                  <div class="region list div">
+                  <i class="	fa fa-map-marker"></i><span class="custom-node leaf" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'region')">{{node.label}}</span>
                   <span v-else class="custom-node noLeaf" @mouseenter="mouseenterSubcatprofession(node,'region')">{{node.label}}</span> 
+                </div>
                 </template>
               </el-cascader-panel>
             </div>
-             <div class="b_profession">行业</div>
+             <div class="b_profession"></div>
              <div class="d-el-cascader-panel profession" @mouseleave = "professionpanelleave('profession')">
              <el-cascader-panel 
                ref="cascader-panel" 
@@ -68,22 +71,17 @@
               <template v-slot="{ node, data}">
                 <!--<span class="custom-node leaf el-icon-share">{{node.label}}</span>-->
                 
-                <span class="custom-node leaf" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'profession')">{{node.label}}</span>
+                <i class="fa fa-universal-access"></i><span class="custom-node leaf" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'profession')">{{node.label}}</span>
                 <span v-else class="custom-node noLeaf" @mouseenter="mouseenterSubcatprofession(node,'profession')">{{node.label}}</span> 
                 
                 </template>
              </el-cascader-panel>
             </div>
-            </div>         
+            </div>       
            <div class="d-center">
-               <list></list>
-               <list></list>
-               <list></list>
-               <list></list>
-               <list></list>
-               <list></list>
-               <list></list>
-               <list></list>
+             <div class="company div" v-for="(company, index) in companys" :key="index">
+               <list :img_path="company.imgPath" :area="company.provinceAddrName" :industry="company.industryName" :nature_name="company.natureName" :company_name="company.name" :company_no="company.companyNo"></list>
+              </div>
            </div>         
            <div class="d-right"></div>
         </div>
@@ -107,14 +105,16 @@
         parentprofession: null,
         poptions:[],
         options:[],
-        images: [{id:1,url:require("../img/001.jpg")},{id:2,url:require("../img/002.jpg")},{id:3,url:require("../img/003.jpg")}]
+        images: [{id:1,url:require("../img/001.jpg")},{id:2,url:require("../img/002.jpg")},{id:3,url:require("../img/003.jpg")}],
+        companys:[]
     };
   },
   mounted()
   {
      this.fetchData(),
      this.getParentRegion(),
-     this.getProfession()
+     this.getProfession(),
+     this.getcompanys()
   },
   methods:
   {
@@ -141,6 +141,17 @@
           el_node[m].style.display = 'none'
         }
        }
+    },
+    getcompanys()
+    {
+      axios({
+                 method: "get",
+                 url: "http://localhost:8093/company/getCompanys",
+             }).then((res) => {
+              this.companys = res.data;
+             })
+            
+
     },
     fetchData() 
     {
@@ -325,23 +336,45 @@
 
 </script>
 <style>
-    .enterprise_in
+    .fa.fa-map-marker
     {
-       height: 32px;
-       width: 100px;
-       justify-content: center;
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      font-size: 18px;
+      color: rgb(119, 128, 201);
+    }
+    .fa.fa-universal-access
+    {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      font-size: 16px;
+      color: rgb(119, 128, 201);
+    }
+    .company.div
+    {
+      width: 100%;
+    }
+    .menuitem
+    {
+      font-size:18px;
+      font-weight: 500;
     }
     .cascader-panel
     {
       position: absolute;
       height: 400px;
-      margin-bottom: 0px;
+      margin-bottom: 10px;
       margin-right: 0px;
-      background-color: beige;
     }
     .cascader-panel.region
     {
       height: 500px;
+    }
+    .cascader-panel.region .el-icon-arrow-right
+    {
+      display: none;
     }
     .el-cascader-menu__wrap
     {
@@ -359,6 +392,30 @@
         height: 60px;
         background-color:rgb(199, 193, 196);
     }
+    .el-menu-item.is-active {
+       
+    }
+    .el-menu-item
+    {
+
+    }
+    .top.left
+    {
+      width: 60%;
+    }
+    .top.right
+    {
+      float:right;
+      width: 40%;
+    }
+    .single.btn
+    {
+       height: 30px;
+       width: 80px;
+       margin-top: 25px;
+       text-align: center;
+       padding: 0px;
+    }
     .main_
     {
         
@@ -366,8 +423,7 @@
         height: 100%;
         margin-top: 5px;
         margin-left: 5%;
-        margin-right: 5%;
-        
+        margin-right: 5%;        
     }
     .adv_
     {
@@ -394,11 +450,6 @@
         display: flex;
         margin-left: 0px;
     }
-    .enterprise_in
-    {
-      display: flex;
-      margin-right: 0px;
-    }
     .el-d
     {
         display:flex;
@@ -412,30 +463,47 @@
     {
         width: 22%;
         height: 100%;
-        background-color: beige;
+        background-color:rgb(253, 253, 253);
     }
-    .t_region
+    .t_region 
     {
        width: 100%;
-       height: 30px;
-       background-color: rgb(233, 206, 131);
+       height: 40px;
+       color:rgb(127, 130, 133);
+       font-size: 20px;
+       font-weight:550;
+       text-align: center;
+       letter-spacing: 20px;
+       background-color: rgb(207, 217, 243);
+       border-radius: 10px;
     }
     .b_profession
     {
-       width: 100%;
-       height: 30px;
-       background-color: rgb(233, 206, 131);
+      width: 100%;
+      height: 40px;
+       color: rgb(81, 112, 111);
+       font-size: 20px;
+       font-weight:550;
+       text-align: center;
+       letter-spacing: 20px;
+       background-color: rgb(207, 217, 243);
+       border-radius: 10px;
     }
     .d-el-cascader-panel
     {
       width: 100%;
       height: 500px;
       position: static;
+      border-radius: 10px;
     }
     .d-center
     {
-        width: 53%;
+        width: 58%;
         height: 100%;
+        display: flex;
+        flex-direction:column;
+        align-items: flex-start;
+        margin-top: 1px;
     }
     .d-right
     {

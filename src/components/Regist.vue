@@ -13,7 +13,8 @@
             <el-row class="el-row top">
               <el-col :span="9">
                 <div>
-                  <img class="company-main-img" src="../company_imgs/00008.jpg">
+                  <input type="file" id ="chooseimg" accept="image/*" style="display: none;" @change="fileChange">
+                  <img class="company-main-img" id="mainimg" @click="openfile()" src="../company_imgs/00008.jpg">
                 </div>
               </el-col>
               <el-col :span="15">
@@ -27,9 +28,9 @@
         </div>
         <el-row class="el-row-info a">
             <el-col :span="12">
-              <div class="div-l company_name"><span><i class="fa fa-plus-circle"></i>公司名称</span></div>
+              <div class="div-l company_name"><span><i class="fa fa-plus-circle"></i>企业名称</span></div>
               <div>
-                <el-input class="input company_name" v-model="company_name" placeholder="请输入公司名称">
+                <el-input class="input company_name" v-model="company_name" placeholder="请输入企业名称">
                 </el-input>
               </div>
             
@@ -45,7 +46,7 @@
             <el-col :span="12">
               <div class="div-l nature"><span><i class="fa fa-plus-circle"></i>企业类型</span></div>
               <div>
-                <el-select class="el-select nature" v-model="nature_selected" placeholder="国企">
+                <el-select class="el-select nature" v-model="nature_selected" @change="naturehandleChange" placeholder="国企">
                   <el-option v-for="item in natures" :key="item.value" :value="item.value" :label="item.label"></el-option>
                 </el-select>
               </div>
@@ -117,7 +118,7 @@
             <el-col :span="8">
               <div class="div-l thr_profession"><span><i class="fa fa-plus-circle"></i>三级行业</span></div>
               <div>
-                <el-select class="el-select thr_profession" v-model="thrpro_selected" placeholder="">
+                <el-select class="el-select thr_profession" v-model="thrpro_selected" @change="thrhandlechange" placeholder="">
                   <el-option v-for="item in thr_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
                 </el-select>
               </div>
@@ -130,7 +131,7 @@
               <el-button type="text" @click="addpic" class="add btn"><i class="fa fa-plus-circle"></i>添加图片</el-button>
             </div>
             <div class="content div">
-              <div class="picture_content div"  id="p_content_div">
+              <div class="picture_content div">
                 <div v-for="(picinfo, index) in picinfos" :key="index">
                   <pic :f_input="picinfo.finputId" :file_img="picinfo.imgId" @getInfo="getInfoFromChild"></pic>
                  <!--<component :is='com' ></component> -->
@@ -140,13 +141,13 @@
           </div>
           <div>
             <div class="title div">
-              <el-button type="text" class="add btn"><i class="fa fa-plus-circle"></i>添加视频</el-button>
+              <el-button type="text" @click="addvideo" class="add btn"><i class="fa fa-plus-circle"></i>添加视频</el-button>
             </div>
             <div class="content div">
               <div class="video_content div">
-                <input type="file" ref="videofileInput" class="videofile input" id="v_input" accept="video/*" style="display: none;" @change="handleVideoFileChange"/>
-                <video class="p_video" src="../video/135353.mp4" @click="filevideoopen" id="file_video"></video>
-                <el-input class="input img" v-model="v_title" placeholder="请输入视频标题"></el-input>
+                <div v-for="(videoinfo, index) in videoinfos" :key="index">
+                  <vid :v_input="videoinfo.vinputId" :file_video="videoinfo.videoId" @getvInfo="getvInfoFromChild"></vid>
+                </div>
               </div>
             </div>
           </div>
@@ -163,8 +164,8 @@
 </div>
 </template>
 <script>
-import pic from './picture'
-import video from './video'
+import vid from './video';
+import pic from './picture';
 import axios from 'axios';
 export default {
     data() {
@@ -176,15 +177,17 @@ export default {
         contact: "",
         mobile_num: "",
         nature_selected: "",
+        nature_selected_name:"",
         region_selected: "",
+        region_selected_name:"",
         city_selected: "",
+        city_selected_name:"",
         event_selected: "",
         onepro_selected: "",
         twopro_selected: "",
+        twopro_selected_name: "",
         thrpro_selected: "",
-        p_title: "",
-        v_title: "",
-        srcpath: require("../picture/00001.jpg"),
+        thrpro_selected_name: "",
         regions: [],
         natures: [{value:1,label:'国企'},{value:2,label:'央企'},{value:3,label:'民营企业'}],
         citys: [],
@@ -196,16 +199,59 @@ export default {
         imgs_pro: [],
         videos: [],
         videos_pro: [],
-        coms: [],
-        picinfos: []
+        picinfos: [],
+        videoinfos: []
     };
   },
   methods:
   {
+    naturehandleChange(value)
+    {
+      const selectedoption = this.natures.find((item)=>item.value===this.nature_selected);
+       this.nature_selected_name = selectedoption.label;
+    },
+    thrhandlechange(value)
+    {
+      const selectedoption = this.thr_professions.find((item)=>item.value===this.thrpro_selected);
+       this.thrpro_selected_name = selectedoption.label;
+    },
+    openfile()
+    {
+      document.getElementById("chooseimg").click();
+    },
+    fileChange()
+    {
+      //var pfile =  this.$refs.fileInput.files[0];
+       var pfile =  document.getElementById("chooseimg").files[0];
+       var img_p ={
+        name: pfile.name,
+        isMainImg: 1,
+        discrip: ""
+       }
+       //var imgid = this.$props.file_img;
+       if(window.FileReader)
+       {
+        var reader = new FileReader();
+        reader.readAsDataURL(pfile);
+        reader.onload=function()
+        {
+          //var p_img= this.$refs.fileimg;
+          var p_img = document.getElementById("mainimg");
+          p_img.src= this.result;
+        }
+        this.imgs.push(pfile);
+        this.imgs_pro.push(img_p);
+       }
+    },
     getInfoFromChild(pfile,img_pro)
     {
        this.imgs.push(pfile);
        this.imgs_pro.push(img_pro);
+    },
+    getvInfoFromChild(pfile,video_pro)
+    {
+      this.videos.push(pfile);
+      this.videos_pro.push(video_pro);
     },
     addpic()
     {
@@ -222,32 +268,19 @@ export default {
       this.picinfos.push(info);
       //this.coms.push('pic');
     },
-
-    filevideoopen()
+    addvideo()
     {
-      document.getElementById('v_input').click();
+      const timestamp = new Date().getTime();
+      let vinputid = "vinput"+timestamp;
+      let videoid = "video"+timestamp;
+      var info = 
+      {
+        vinputId: vinputid,
+        videoId: videoid
+      }
+      this.videoinfos.push(info);
     },
-    handleVideoFileChange()
-    {
-       var pfile =  this.$refs.videofileInput.files[0];
-       this.videos.push(pfile);
-       var video_pro ={
-        name: pfile.name,
-        discrip: this.v_title
-       }
-       this.videos_pro.push(video_pro);
-       if(window.FileReader)
-       {
-        var reader = new FileReader();
-        reader.readAsDataURL(pfile);
-        reader.onload=function()
-        {
-          var p_video = document.getElementById('file_video');
-          p_video.src= this.result;
-          
-        }
-       }
-    },
+    
     fillcity(pvalue)
     {
       let sregion = this.regions.find(e=>e.value==pvalue);  
@@ -269,6 +302,7 @@ export default {
         this.citys.push(scity);
        }
        this.city_selected=this.citys[0].value;
+       this.city_selected_name = this.citys[0].label;
     },
     filltwopro(fvalue)
     {
@@ -283,6 +317,7 @@ export default {
     fillthrpro(fvalue)
     {
        let tpro = this.two_professions.find(e=>e.value==fvalue);
+       this.twopro_selected_name = tpro.label;
        this.thr_professions.splice(0,this.thr_professions.length);
        if(tpro.children.length>0)
        {
@@ -303,17 +338,22 @@ export default {
             name: this.company_name,
             creditCode: this.credit_code,
             natureId: this.nature_selected,
+            natureName:this.nature_selected_name,
             scale: this.scale,
             provinceAddr: this.region_selected,
+            provinceAddrName:this.region_selected_name,
             cityAddr: this.city_selected,
+            cityAddrName:this.city_selected_name,
             contact: this.contact,
             introduction: this.con_introduct,
             mobileNum: this.mobile_num,
             eventType: this.event_selected,
             industry: this.onepro_selected,
             subIndustry: this.twopro_selected,
-            thrIndustry: this.thrpro_selected
-            
+            subIndustryName: this.twopro_selected_name,
+            thrIndustry: this.thrpro_selected,
+            thrIndustryName: this.thrpro_selected_name,
+            industryName:this.twopro_selected_name+"/"+this.thrpro_selected_name
         },
         {
           headers: {
@@ -322,9 +362,18 @@ export default {
         }
       ).then((res)=>{
         const formData = new FormData();
+        
+        if(this.imgs.length<=0)
+        {
+          formData.append('uploadimg',new File([],'uploadimg'));
+        }
         for(let i=0;i<this.imgs.length;i++)
         {
           formData.append('uploadimg',this.imgs[i]);
+        }
+        if(this.videos.length<=0)
+        {
+          formData.append('uploadvideo',new File([],'uploadvideo'));
         }
         for(let n=0;n<this.videos.length;n++)
         {
@@ -333,14 +382,7 @@ export default {
         formData.append('imgspro',JSON.stringify(this.imgs_pro));
         
         formData.append('videospro',JSON.stringify(this.videos_pro));
-        this.$confirm(this.videos_pro, 'title', {
-          confirmButtonText: 'confirm',
-          cancelButtonText: 'cancel',
-          type: 'warning'
-        }).then(() => {
-          
-        }).catch(() => {});
-        formData.append('companyNo','CP20240703010255');
+        formData.append('companyNo',res.data);
         axios.post('http://localhost:8093/file/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -353,7 +395,7 @@ export default {
            console.error("图片上传失败:"+error);
         });
       }).catch(err=>{
-        console.error("公司注入失败:"+err);
+        console.error("企业注入失败:"+err);
       });
     },
     getParentRegion()
@@ -389,7 +431,8 @@ export default {
               this.regions.push(currentOption)
               
             }
-            this.region_selected = this.regions[0].value
+            this.region_selected = this.regions[0].value;
+            this.region_selected_name=this.regions[0].label;
           }        
         }).catch(() => {console.log(response.data);})
         .catch(error => {
@@ -462,8 +505,8 @@ export default {
       this.getProfession();
   },
   components:{
+    vid,
     pic,
-    video,
   }
 }
 </script>
@@ -582,7 +625,9 @@ export default {
   
   .video_content
   {
-    width: 220px;
-    height: 200px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 235px;
   }
 </style>

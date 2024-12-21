@@ -14,7 +14,7 @@
     data() {
     return {
         p_title: "",
-        srcpath: require("../picture/00001.jpg"),
+        srcpath: require("../picture/default.jpg"),
       };
   },
   methods:{
@@ -56,7 +56,7 @@
     align-items: flex-start;
     margin-left: 5px;
     margin-top: 10px;
-    margin-right: 20px;
+    margin-right: 10px;
   }
   .p_img
   {

@@ -9,7 +9,7 @@
           <el-col :span="18">
             <div class="top">
                 <img class="info logo"/>
-                <label class="info label company">异度空间(武汉)信息技术有限公司</label>
+                <label class="info label company">{{ companyinfo.name }}</label>
                 <el-input class="el-input serch" v-model="serchValue" placeholder="搜索企业">
                     <el-button class="el-button serch" slot="suffix" type="text">搜索</el-button>
                 </el-input>
@@ -21,11 +21,11 @@
                         
                         <span class="info span">
                           <label class="info label code title">统一信用代码:</label>
-                          <label class="info label code value">91420100MADEF0WW0K</label>
+                          <label class="info label code value">{{ companyinfo.creditCode }} </label>
                         </span>
                         <span class="info span">
                           <label class="info label nature title">企业性质:</label>
-                          <label class="info label nature value">国有企业</label>
+                          <label class="info label nature value">{{ companyinfo.natureName}}</label>
                        </span>
                     </div>
                   </el-col>
@@ -42,7 +42,7 @@
                 <el-row>
                   <el-col :span="14">
                     <div class="main pic div">
-                        <img class="main img" src="../company_imgs/00008.jpg"/>
+                        <img class="main img" :src="companyinfo.imgPath"/>
                     </div>
                     
                   </el-col>
@@ -50,19 +50,19 @@
                     <div class="info left div">
                       <div class="info content"> 
                     <div class="info left div">
-                        <label>地址：湖北省武汉市东湖高新区</label>
+                        <label>地址：{{companyinfo.contact}}</label>
                       </div>
                       <div class="info left div">
-                        <label>号码：15618656701</label>
+                        <label>号码：{{companyinfo.mobileNum}}</label>
                       </div>
                       <div class="info left div">
-                        <label>规模：55人</label>
+                        <label>规模：{{ companyinfo.scale }}</label>
                       </div>
                       <div class="info left div">
-                        <label>行业：计算机软件</label>
+                        <label>行业：{{ companyinfo.subIndustryName}}</label>
                       </div>
                       <div class="info left div">
-                        <label>二级行业：互联网开发</label>
+                        <label>二级行业：{{companyinfo.thrIndustryName}}</label>
                       </div>
                     </div>
                     </div>
@@ -73,8 +73,7 @@
                     <div class="div titleinfo">
                     <span>企业介绍</span>
                     </div>
-                        <p>公司始建于1985年8月5日，由上世纪六十年代建设在秦岭山区的四个大型军工企业（853厂、895厂、4310厂、4320厂）联合组建，1993年整体搬迁至西安高新区电子工业园。公司现隶属于陕西省国资委，为陕西电子信息集团重要成员企业。公司是我国研究制造电子元器件、电子材料、太阳能光伏和半导体照明的高新技术企业，是我国军工电子科技成果转化的重要基地，中国电子元件行业协会副理事长单位、厚膜混合集成电路分会理事长单位，中国西部重要的电子元器件科研生产基地，在行业诸多领域处于核心和领先地位。  
-发展无止境，改革无穷期。西京人信心满怀，正在为实现“专业引领、行业领先、造福职工、奉献社会”的美好愿景而努力奋斗！</p>
+                        <p>{{companyinfo.introduction}}</p>
                   </el-col>
                 </el-row>
             </div>
@@ -83,16 +82,17 @@
               </div>
               <div class="div imgsorvideos">
                 <div class="div img">
-                    <img class="intro img"/>
-                    <label class="lab dis">车轮滚滚</label>
+                  <div v-for="(picinfo, index) in picinfos" :key="index">
+                  <cpic :file_img="picinfo.fileid" :srcpath="picinfo.filepath" :ptitle="picinfo.filetitle"></cpic>
+                </div>
                 </div>
               </div>
               <div class="div titleinfo">
                 <span>产品视频</span>
               </div>
-              <div>
               <div class="div imgsorvideos">
-                  <video class="intro video"></video>
+                <div v-for="(videoinfo, index) in videoinfos" :key="index">
+                  <cvid file_img="videoinfo.fileid" :srcpath="videoinfo.filepath" :ptitle="videoinfo.filetitle"></cvid>
               </div>
             </div>           
           </el-col>
@@ -101,6 +101,118 @@
     </div>
 </template>
 <script>
+  import axios from 'axios';
+  import cpic from './cpicture';
+  import cvid from './cvideo';
+  export default {
+    data()
+    {
+      return {
+        companyinfo: {
+          companyNo: '',
+          name: '',
+          creditCode: '',
+          natureId: 0,
+          natureName: '',
+          scale: 0,
+          provinceAddr: '',
+          cityAddr: '',
+          contact: '',
+          introduction: '',
+          mobileNum: '',
+          imgPath: '',
+          eventType: 0,
+          industry: '',
+          subIndustry: '',
+          subIndustryName: '',
+          thrIndustry: '',
+          thrIndustryName: ''
+        },
+        imgcompanyinfo: {
+          companyNo: '',
+          imgPath: '',
+          imgTitle: '',
+          discription: ''
+        },
+        videocompanyinfo: {
+          companyNo: '',
+          videoPath: '',
+          videoTitle: '',
+          discription: ''
+        },
+        videoinfos: [],
+        picinfos: [],
+      }
+    },
+    methods:
+    {
+      getcompanyinfo()
+      {
+        axios({
+                 method: "get",
+                 url: "http://localhost:8093/company/getCompanyByNo",
+                 params: {
+                   companyNo: this.$route.query.companyNo,
+                },
+             }).then((res) => {
+                    var company = res.data;
+                    if(company !=null)
+                    {
+                      this.companyinfo.companyNo = company.companyNo;
+                      this.companyinfo.name = company.name;
+                      this.companyinfo.creditCode = company.creditCode;
+                      this.companyinfo.natureId = company.natureId;
+                      this.companyinfo.natureName = company.natureName;
+                      this.companyinfo.scale = company.scale;
+                      this.companyinfo.provinceAddr =company.provinceAddr;
+                      this.companyinfo.cityAddr = company.cityAddr;
+                      this.companyinfo.contact = company.contact;
+                      this.companyinfo.imgPath ="http://192.168.10.139/"+company.imgPath;
+                      this.companyinfo.introduction =company.introduction;
+                      this.companyinfo.mobileNum =company.mobileNum;
+                      this.companyinfo.eventType =company.eventType;
+                      this.companyinfo.industry =company.industry;
+                      this.companyinfo.subIndustry =company.subIndustry;
+                      this.companyinfo.subIndustryName = company.subIndustryName;
+                      this.companyinfo.thrIndustry =company.thrIndustry;
+                      this.companyinfo.thrIndustryName = company.thrIndustryName;
+                    }
+                  });
+                  
+                  axios({
+                    method: "get",
+                    url: "http://localhost:8093/file/filesInfo",
+                    params: {
+                       companyNo: this.$route.query.companyNo,
+                    },
+                    //responseType:'blob'
+                  }).then((response)=>{
+                    for(let i=0;i<response.data.length;i++)
+                    {
+                      let info ={
+                        fileid :response.data[i].companyNo+response.data[i].id,
+                        filetitle : response.data[i].title,
+                        filepath:response.data[i].filePath
+
+                      }
+                      if(response.data[i].fileType==0&&!response.data[i].isMainImg)
+                        this.picinfos.push(info);
+                      else
+                        this.videoinfos.push(info);
+                    }
+                  })
+                
+      }
+    },
+    mounted()
+    {
+       this.getcompanyinfo();
+    },
+    components:{
+       cvid,
+       cpic,
+    }
+  }
 </script>
 <style>
   .intro.img
@@ -140,10 +252,10 @@
   }
   .div.img
   {
-     margin-top: 3px;
-     margin-right: 5px;
-     display: flex;
-     flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 235px;
   }
   .lab.dis
   {
