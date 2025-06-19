@@ -3,7 +3,8 @@
         <video class="p_video" :id="file_video" controls>
           <source :src="srcpath">
         </video>
-        <h3 class="input img" type="" >{{ ptitle }}</h3>
+        <span class="input video" type="" >{{ ptitle }}</span>
+        <p>全方位就业指导服务，提升大学生就业能力,也可与其他系统的单据和凭证等结合使用</p>
     </div>
 </template>
 <script>
@@ -35,12 +36,18 @@
   }
   .p_video
   {
-    width: 220px;
-    height: 180px;
+    width: 320px;
+    height: 280px;
   }
   .input.video
   {
     margin: 8px;
-    width: 210px;
+    color: white;
+     background-color: rgb(243, 128, 51);
+     font-size: 12px;
+     padding-left: 10px;
+     padding-right: 10px;
+     padding-top: 5px;
+     padding-bottom: 5px;
   }
 </style>

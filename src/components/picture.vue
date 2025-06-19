@@ -2,7 +2,7 @@
     <div class="div content">
         <input type="file" ref="fileInput" class="file input" :id="f_input" accept="image/*" style="display: none;" @change="handleFileChange"/>
         <img class="p_img" ref ="fileimg" :src="srcpath" :id="file_img" @click="fileopen()" alt=""/>
-        <el-input class="input img" v-model="p_title" placeholder="请输入图片标题"></el-input>
+        <!--<el-input class="input img" v-model="p_title" placeholder="请输入图片标题" @blur="gettitle"></el-input>-->
     </div>
 </template>
 <script>
@@ -14,6 +14,7 @@
     data() {
     return {
         p_title: "",
+        file_name: "",
         srcpath: require("../picture/default.jpg"),
       };
   },
@@ -22,14 +23,19 @@
     {
       document.getElementById(this.$props.f_input).click();
     },
+    gettitle()
+    {
+      this.$emit("getimgtitle",this.file_name,this.p_title);
+    },
     handleFileChange()
     {
       //var pfile =  this.$refs.fileInput.files[0];
        var pfile =  document.getElementById(this.$props.f_input).files[0];
+       this.file_name = pfile.name;
        var img_pro ={
         name: pfile.name,
         isMainImg: 0,
-        discrip: this.p_title
+        title: this.p_title
        }
        var imgid = this.$props.file_img;
        if(window.FileReader)

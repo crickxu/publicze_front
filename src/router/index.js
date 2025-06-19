@@ -4,10 +4,13 @@ import HelloWorld from '@/components/HelloWorld'
 import index from '@/components/index'
 import regist from '@/components/Regist'
 import companyInfo from '@/components/companyInfo'
+import product from '@/components/product'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history', // 使用history模式
+  base: '/platform-path/', // 设置基路径
   routes: [
     {
       path: '/index',
@@ -24,5 +27,10 @@ export default new Router({
       name: 'companyInfo',
       component: companyInfo
     },
+    {
+      path: '/product',
+      name: 'product',
+      component: product
+    }
   ]
 })

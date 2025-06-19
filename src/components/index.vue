@@ -1,13 +1,11 @@
 <template>
 <div id="app-f">
     <div class="top_">
-      <div class="top left div"></div>
-      <div class="top right div">
+      <div class="btn_div">
         <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-user"></i>登录</el-button>
         <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-user-plus"></i>注册</el-button>
         <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-gear"></i>企业入驻</el-button>
         <el-button type="primary" class="single btn" @click ="initEnterprise()"><i class="fa fa-file-text"></i>发布公告</el-button>
-        
       </div>
     </div>
     <div class="main_">
@@ -35,8 +33,56 @@
                 </div>
               </el-col>
             </el-row>
+            <el-row class="list area">
+              <div class="container city">
+                 <div
+                    v-for="item in options"
+                    :key="item.value"
+                    class="item"
+                    @mouseover="divview(item.value)"
+                    @mouseout="divdisplay(item.value)"
+                    @click="conserch(0,item.value)"
+                    >
+                  {{ item.label }}
+                  <div class="citys item " :ref="item.value">
+                    <ul>
+                      <li v-for="city in item.children" class="city" @click="conserch(1,city.value)">
+                        <span class="li-content">
+                        {{ city.label }}
+                      </span>
+                      </li>
+                    </ul>
+                  </div>
+                 </div>
+              </div>
+            </el-row>
+            <el-row class="list region">
+              <div class="container region">
+                  <div
+                    v-for="item in poptions"
+                    :key="item.value"
+                    class="item"
+                    @mouseover="divview(item.value)"
+                    @mouseout="divdisplay(item.value)"
+                    @click="conserch(2,item.value)"
+                  >
+                  {{ item.label }}
+                  <div class="regions item " :ref="item.value">
+                    <ul class="my_ul">
+                      <li v-for="region in item.children" class="region" @click="conserch(3,region.value)">
+                        <span class="li-content">
+                        {{ region.label }}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                 </div>
+              </div>
+            </el-row>
         </div>
         <div class="center_">
+          <div class="d-left"></div>
+           <!--
            <div class="d-left">
              <div class="t_region"></div>
             
@@ -68,24 +114,30 @@
                :show-all-levels="false" 
                :props="{ expandTrigger: 'hover'}"
               >
-              <template v-slot="{ node, data}">
+              <template v-slot="{ node, data}"> -->
                 <!--<span class="custom-node leaf el-icon-share">{{node.label}}</span>-->
-                
+                <!--                                  
                 <i class="fa fa-universal-access"></i><span class="custom-node leaf" v-if="!node.isLeaf" @mouseenter="mouseenterLeafprofession(node,'profession')">{{node.label}}</span>
                 <span v-else class="custom-node noLeaf" @mouseenter="mouseenterSubcatprofession(node,'profession')">{{node.label}}</span> 
                 
                 </template>
              </el-cascader-panel>
             </div>
-            </div>       
+            </div>  -->     
            <div class="d-center">
              <div class="company div" v-for="(company, index) in companys" :key="index">
-               <list :img_path="company.imgPath" :area="company.provinceAddrName" :industry="company.industryName" :nature_name="company.natureName" :company_name="company.name" :company_no="company.companyNo"></list>
+               <list :img_path="company.imgPath" :area="company.provinceAddrName" :industry="company.industryName" :nature_name="company.natureName" :company_name="company.name" :company_no="company.companyNo" :company_num="company.scale"></list>
               </div>
            </div>         
            <div class="d-right"></div>
         </div>
         <div class="footer_">
+          <div class="footer left">
+            <label>Copyright 异度空间(武汉)信息技术有限公司, All Rights Reserved</label>
+          </div>
+          <div class="footer right">
+            <img src="../img/gongan.png"><label>鄂ICP备2025112386号-1</label>
+          </div>
         </div>
     </div>
     
@@ -97,6 +149,8 @@
    export default {
     data() {
     return {
+        server_addr: 'http://111.230.49.63:30104',
+        //server_addr: 'http://localhost:8093',
         i_text: "",
         categoryActive: '', // 当前选中的一级
         currentActiveTwo: '', // 当前选中的二级
@@ -118,6 +172,47 @@
   },
   methods:
   {
+    conserch(serchtype, paramid)
+    {
+      let cprovice =null;
+      let ccity =null;
+      let cindustry =null;
+      let csub_industry =null;
+      if(serchtype ==0)
+         cprovice = paramid;
+      if(serchtype ==1)
+         ccity = paramid;
+      if(serchtype ==2)
+         cindustry = paramid;
+      if(serchtype ==3)
+         csub_industry =paramid;
+       axios({
+                 method: "get",
+                 url: this.server_addr + "/company/getCompanysByCon",
+                 params: {
+                  provinceAddr: cprovice,
+                  cityAddr: ccity,
+                  industry: cindustry,
+                  subIndustry: csub_industry
+                 }
+             }).then((res) => {
+              this.companys = res.data;
+             })
+    },
+    divview(refvalue)
+    {
+      this.$nextTick(()=>{
+        var el = this.$refs[refvalue][0];
+        el.style.display = 'block';
+      })
+    },
+    divdisplay(refvalue)
+    {
+      this.$nextTick(()=>{
+        var el = this.$refs[refvalue][0];
+        el.style.display = 'none';
+      })
+    },
     initEnterprise()
     {
       this.$router.push('regist');
@@ -146,7 +241,7 @@
     {
       axios({
                  method: "get",
-                 url: "http://localhost:8093/company/getCompanys",
+                 url: this.server_addr + "/company/getCompanys",
              }).then((res) => {
               this.companys = res.data;
              })
@@ -155,7 +250,7 @@
     },
     fetchData() 
     {
-      axios.get('http://localhost:8093/releaseTpye/getAll')
+      axios.get(this.server_addr+'/releaseTpye/getAll')
         .then(response => {
           // 处理返回的数据
           if(response.data!=null)
@@ -170,7 +265,7 @@
     },
     getParentRegion()
     {
-        axios.get('http://localhost:8093/region/getRegions')
+        axios.get(this.server_addr+'/region/getRegions')
         .then(response => {
           // 处理返回的数据
           if(response.data!=null)
@@ -209,7 +304,7 @@
     },
     getProfession()
     {
-        axios.get('http://localhost:8093/profession/getProfession')
+        axios.get(this.server_addr+'/profession/getProfession')
         .then(response => {
           // 处理返回的数据
           if(response.data!=null)
@@ -336,6 +431,71 @@
 
 </script>
 <style>
+/*
+li::marker {
+  font-size: 60px;
+  color:rgb(235, 121, 99);
+}*/
+li::marker {
+  font-size: 25px;
+  vertical-align: middle;
+}
+.li-content {
+  color: black;
+  margin-left: -20px;
+  font-size:15px;
+  vertical-align: top;
+  margin-bottom:5px;
+}
+  .regions.item
+  {
+    /*
+    transition: opacity 0.5s ease; */ /* 平滑的淡入淡出效果 */
+    /* opacity: 0; /* 初始透明度为0 */ 
+    position: absolute;
+    bottom: -100; /* 将子元素定位到父元素的底部 */
+    display: none;
+    background-color:rgb(221, 231, 240);
+    width: 180px;
+  }
+  .citys
+  {
+    position: absolute;
+    bottom: -100; /* 将子元素定位到父元素的底部 */
+    display: none;
+    background-color:rgb(221, 231, 240);
+    width: 120px;
+  }
+  .container {
+    justify-content: start;/* 水平排列，从左开始 */
+    overflow-wrap: break-word;/* 换行 */
+    align-items: center; 
+    position: relative;
+    /* height: 60px;
+     /*display: flex;         /* 设定为flex容器 */ 
+     /*flex-direction: row; 
+     place-items: center; */
+     /*white-space: normal;   /* 允许文本换行 */
+  }
+  .container.region
+  {
+    display: flex;
+    align-items: center; 
+    height: 40px
+  }
+  .item
+  {
+    display: inline-block;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: small;
+    margin-left: 18px;
+    
+  }
+  .citys.item
+  {
+    display: none;
+    z-index: 1;
+  }
     .fa.fa-map-marker
     {
       position: absolute;
@@ -389,30 +549,34 @@
     }
     .top_
     {
-        height: 60px;
+        height: 50px;
         background-color:rgb(199, 193, 196);
     }
-    .el-menu-item.is-active {
-       
-    }
-    .el-menu-item
+    .list
     {
-
+      height: 50px;
+      background-color: rgb(221, 231, 240);
+      margin-bottom: 5px;
+      border-radius:10px;
+      border-style: solid;
+      border-color:coral;
+      border-width: 1px;
     }
-    .top.left
+    .list.region
     {
-      width: 60%;
+      height: 40px;
     }
-    .top.right
+    
+    .btn_div
     {
-      float:right;
-      width: 40%;
+      float: right;
+      margin-right: 50px;
+      margin-top: 15px;
     }
     .single.btn
     {
        height: 30px;
        width: 80px;
-       margin-top: 25px;
        text-align: center;
        padding: 0px;
     }
@@ -461,7 +625,7 @@
     }
     .d-left
     {
-        width: 22%;
+        width: 18%;
         height: 100%;
         background-color:rgb(253, 253, 253);
     }
@@ -498,7 +662,7 @@
     }
     .d-center
     {
-        width: 58%;
+        width: 57%;
         height: 100%;
         display: flex;
         flex-direction:column;
@@ -512,12 +676,26 @@
     }
     .footer_
     {
+      display: flex;
+      align-items: center;
+      color: white;
         overflow: hidden;
         bottom: 0;
         left: 0;
         width: 100%;
         position: static;
-        background-color:rgb(190, 195, 199);
-        height: 150px;
+        background-color:rgb(101, 103, 105);
+        height: 80px;
+    }
+    .footer.left
+    {
+      position: relative;
+      left: -80px;
+      width: 60%;
+    }
+    .footer.right
+    {
+      
+      width: 40%;
     }
 </style>

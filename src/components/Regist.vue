@@ -9,34 +9,28 @@
     <el-col :span="18">
       <div class="center_r">
         <div class="_layer top"></div>
-          <div>
-            <el-row class="el-row top">
-              <el-col :span="9">
-                <div>
-                  <input type="file" id ="chooseimg" accept="image/*" style="display: none;" @change="fileChange">
-                  <img class="company-main-img" id="mainimg" @click="openfile()" src="../company_imgs/00008.jpg">
-                </div>
-              </el-col>
-              <el-col :span="15">
-                <div>
-                  <textarea class="text comany-introduction" v-model="con_introduct"></textarea>
-                </div>
-              </el-col>
-            </el-row>
+        <div class="div topinfo">
+            <div class="div img">
+              <input type="file" id ="chooseimg" accept="image/*" style="display: none;" @change="fileChange">
+              <img class="company-main-img" id="mainimg" @click="openfile()" src="../company_imgs/00008.jpg">
+            </div>
+            <div class="div text">
+              <textarea class="text comany-introduction" v-model="con_introduct"></textarea>
+            </div>
          </div>
         <div class="_layer middle">         
         </div>
         <el-row class="el-row-info a">
             <el-col :span="12">
-              <div class="div-l company_name"><span><i class="fa fa-plus-circle"></i>企业名称</span></div>
+              <div class="div-l company"><span><i class="fa fa-home"></i>企业名称</span></div>
               <div>
-                <el-input class="input company_name" v-model="company_name" placeholder="请输入企业名称">
+                <el-input class="input company" v-model="company_name" placeholder="请输入企业名称">
                 </el-input>
               </div>
             
             </el-col>
             <el-col :span="12">
-              <div class="div-l credit_code"><span><i class="fa fa-plus-circle"></i>统一信用代码</span></div>
+              <div class="div-l credit_code"><span><i class="fa fa-credit-card"></i>统一信用代码</span></div>
               <div>
                 <el-input class="input credit_code" v-model="credit_code" placeholder="请输入统一信用代码"></el-input>
               </div>
@@ -44,7 +38,7 @@
           </el-row>
           <el-row class="el-row-info b">
             <el-col :span="12">
-              <div class="div-l nature"><span><i class="fa fa-plus-circle"></i>企业类型</span></div>
+              <div class="div-l nature"><span><i class="fa fa-bookmark"></i>企业类型</span></div>
               <div>
                 <el-select class="el-select nature" v-model="nature_selected" @change="naturehandleChange" placeholder="国企">
                   <el-option v-for="item in natures" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -52,7 +46,7 @@
               </div>
             </el-col>
             <el-col :span="12">
-              <div class="div-l scale"><span><i class="fa fa-plus-circle"></i>企业规模</span></div>
+              <div class="div-l scale"><span><i class="fa fa-male"></i>企业规模</span></div>
               <div>
                 <el-input-number class="input scale" v-model="scale" placeholder=""></el-input-number>
               </div>
@@ -60,7 +54,7 @@
           </el-row>
           <el-row class="el-row-info c">
             <el-col :span="12">
-              <div class="div-l region"><span><i class="fa fa-plus-circle"></i>企业所在省</span></div>
+              <div class="div-l region"><span><i class="fa fa-location-arrow"></i>企业所在省</span></div>
               <div>
                 <el-select class="el-select region" v-model="region_selected" placeholder="" @change="fillcity">
                   <el-option v-for="item in regions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -68,7 +62,7 @@
               </div>
             </el-col>
             <el-col :span="12">
-              <div class="div-l city"><span><i class="fa fa-plus-circle"></i>企业所在市</span></div>
+              <div class="div-l city"><span><i class="fa fa-map-marker"></i>企业所在市</span></div>
               <div>
                 <el-select class="el-select city" v-model="city_selected" placeholder="" @change="updateFun">
                   <el-option v-for="item in citys" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -100,7 +94,7 @@
           </el-row>
           <el-row class="el-row-info c">
             <el-col :span="8">
-              <div class="div-l one_profession"><span><i class="fa fa-plus-circle"></i>一级行业</span></div>
+              <div class="div-l one_profession"><span><i class="fa fa-paper-plane"></i>一级行业</span></div>
               <div>
                 <el-select class="el-select one_profession" v-model="onepro_selected" placeholder="" @change="filltwopro">
                   <el-option v-for="item in one_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -108,7 +102,7 @@
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="div-l two_profession"><span><i class="fa fa-plus-circle"></i>二级行业</span></div>
+              <div class="div-l two_profession"><span><i class="fa fa-paper-plane"></i>二级行业</span></div>
               <div>
                 <el-select class="el-select two_profession" v-model="twopro_selected" placeholder="" @change="fillthrpro">
                   <el-option v-for="item in two_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -116,7 +110,7 @@
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="div-l thr_profession"><span><i class="fa fa-plus-circle"></i>三级行业</span></div>
+              <div class="div-l thr_profession"><span><i class="fa fa-paper-plane"></i>三级行业</span></div>
               <div>
                 <el-select class="el-select thr_profession" v-model="thrpro_selected" @change="thrhandlechange" placeholder="">
                   <el-option v-for="item in thr_professions" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -126,22 +120,22 @@
           </el-row>
         <div class="_layer footer"></div>
         <div>
+          <!--
           <div>
             <div class="title div">
-              <el-button type="text" @click="addpic" class="add btn"><i class="fa fa-plus-circle"></i>添加图片</el-button>
+              <el-button type="text" @click="addpic" class="add btn"><i class="fa fa-picture-o"></i>添加图片</el-button>
             </div>
             <div class="content div">
               <div class="picture_content div">
                 <div v-for="(picinfo, index) in picinfos" :key="index">
-                  <pic :f_input="picinfo.finputId" :file_img="picinfo.imgId" @getInfo="getInfoFromChild"></pic>
-                 <!--<component :is='com' ></component> -->
+                  <pic :f_input="picinfo.finputId" :file_img="picinfo.imgId" @getInfo="getInfoFromChild" @getimgtitle="setimgtitle"></pic>
                 </div>
               </div>
             </div>
           </div>
           <div>
             <div class="title div">
-              <el-button type="text" @click="addvideo" class="add btn"><i class="fa fa-plus-circle"></i>添加视频</el-button>
+              <el-button type="text" @click="addvideo" class="add btn"><i class="fa fa-youtube-play"></i>添加视频</el-button>
             </div>
             <div class="content div">
               <div class="video_content div">
@@ -150,9 +144,10 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
           <div>
             <el-button type="primary" @click ="initEnterprise()" class="regist-btn">企业入驻</el-button>
+            <el-button type="primary" @click ="addproduct()" class="addproduct-btn">添加产品</el-button>
           </div>
         </div>
       </div>
@@ -170,6 +165,7 @@ import axios from 'axios';
 export default {
     data() {
     return {
+        server_addr: "http://111.230.49.63:30104",
         con_introduct: "",
         company_name: "",
         credit_code: "",
@@ -248,6 +244,11 @@ export default {
        this.imgs.push(pfile);
        this.imgs_pro.push(img_pro);
     },
+    setimgtitle(pfile_name,img_title)
+    {
+       const fileitem= this.imgs_pro.find(item=>item.name===pfile_name);
+       fileitem.title = img_title;
+    },
     getvInfoFromChild(pfile,video_pro)
     {
       this.videos.push(pfile);
@@ -280,11 +281,16 @@ export default {
       }
       this.videoinfos.push(info);
     },
-    
     fillcity(pvalue)
     {
       let sregion = this.regions.find(e=>e.value==pvalue);  
       this.citys.splice(0, this.citys.length);
+      //获取选中的省份
+      
+      this.region_selected = sregion.value;
+      this.region_selected_name =sregion.label;
+      
+      //填充选中省份关联的市
        if(sregion.children.length>0)
        { 
            sregion.children.forEach(element => {
@@ -325,13 +331,22 @@ export default {
          this.thrpro_selected = this.thr_professions[0].value;
        } 
     },
-    updateFun()
+    updateFun(cvalue)
     {
+      let scity = this.citys.find(e=>e.value==cvalue);
+
+      this.city_selected = scity.value;
+      this.city_selected_name = scity.label;
+      
       this.$forceUpdate();
+    },
+    addproduct()
+    {
+      this.$router.push({name:'product',query:{professions:this.two_professions,sub_professions:this.thr_professions,companyName:this.company_name}});
     },
     initEnterprise()
     {
-      axios.post('http://localhost:8093/company/addCompany',
+      axios.post(this.server_addr + '/company/addCompany',
         {
           
             userNo: "",
@@ -341,7 +356,7 @@ export default {
             natureName:this.nature_selected_name,
             scale: this.scale,
             provinceAddr: this.region_selected,
-            provinceAddrName:this.region_selected_name,
+            provinceAddrName: this.region_selected_name,
             cityAddr: this.city_selected,
             cityAddrName:this.city_selected_name,
             contact: this.contact,
@@ -383,7 +398,7 @@ export default {
         
         formData.append('videospro',JSON.stringify(this.videos_pro));
         formData.append('companyNo',res.data);
-        axios.post('http://localhost:8093/file/upload', formData, {
+        axios.post(this.server_addr+'/file/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -393,14 +408,35 @@ export default {
         })
         .catch(error => {
            console.error("图片上传失败:"+error);
+           this.$confirm('图片或视频上传失败，请联系客服', 'title', {
+            confirmButtonText: 'confirm',
+            cancelButtonText: 'cancel',
+            type: 'warning'
+           }).then(() => {
+            
+           }).catch(() => {});
         });
+        this.$confirm('入驻成功,欢迎！', 'title', {
+          confirmButtonText: 'confirm',
+          cancelButtonText: 'cancel',
+          type: 'warning'
+        }).then(() => {
+          
+        }).catch(() => {});
       }).catch(err=>{
         console.error("企业注入失败:"+err);
+        this.$confirm('企业注入失败:'+err, 'title', {
+          confirmButtonText: 'confirm',
+          cancelButtonText: 'cancel',
+          type: 'warning'
+        }).then(() => {
+          
+        }).catch(() => {});
       });
     },
     getParentRegion()
     {
-        axios.get('http://localhost:8093/region/getRegions')
+        axios.get(this.server_addr+'/region/getRegions')
         .then(response => {
           // 处理返回的数据
           if(response.data!=null)
@@ -432,7 +468,7 @@ export default {
               
             }
             this.region_selected = this.regions[0].value;
-            this.region_selected_name=this.regions[0].label;
+            this.region_selected_name = this.regions[0].label;
           }        
         }).catch(() => {console.log(response.data);})
         .catch(error => {
@@ -442,7 +478,7 @@ export default {
     },
     getProfession()
     {
-        axios.get('http://localhost:8093/profession/getProfession')
+        axios.get(this.server_addr+'/profession/getProfession')
         .then(response => {
           // 处理返回的数据
           if(response.data!=null)
@@ -517,7 +553,7 @@ export default {
   .full
   {
     width: 100%;
-    background-color: rgb(216, 207, 240);
+    background-color: rgb(240, 236, 236);
   }
   .el-row.top
   {
@@ -532,6 +568,8 @@ export default {
   .div-l
   {
     display: flex;
+    font-size: 16px;
+    /*font-family: STXihei;*/
     margin-bottom: 2px;
   }
   .input
@@ -552,26 +590,33 @@ export default {
   .el-select
   {
     float: left;
-  }
-  .el-select .el-input__inner{
-        height: 30px;
+    /deep/ .el-input {
+    .el-input__inner {
+      height: 30px;
     }
+   }
+  }
   .company-main-img
   {
-    padding: 30px;
-    width: 350px;
-    height: 280px;
+    /*padding: 30px;*/
+    /*width: 350px;
+    height: 280px;*/
+    width: 100%;
+    height: 100%;
   }
   .text.comany-introduction
   {
-    width: 600px;
-    height: 280px;
-    margin-top: 30px;
+    font-size: 18px;
+    color: rgb(177, 105, 11);
+    width: 100%;
+    height: 100%;
+    /*width: 600px;
+    height: 280px; */
   }
   ._layer
   {
-    height: 60px;
-    background-color: rgb(216, 207, 240);
+    height: 50px;
+    background-color: rgb(240, 236, 236);
   }
 
   ._layer.top
@@ -595,20 +640,7 @@ export default {
   {
     margin-top: 10px;
   }
-  .p_img
-  {
-    width: 250px;
-    height: 200px;
-  }
-  .p_video
-  {
-    width: 280px;
-    height: 150px;
-  }
-  .input.img
-  {
-    width: 200px;
-  }
+  
   .content.div
   {
     display:flex;
@@ -629,5 +661,21 @@ export default {
     flex-direction: row;
     align-items: flex-start;
     height: 235px;
+  }
+  .div.img 
+  {
+    width: 40%;
+    height: 100%;
+  }
+  .div.text
+  {
+    margin-left: 2px;
+    width: 60%;
+    height: 100%;
+  }
+  .div.topinfo
+  {
+    display: flex;
+    height: 300px;
   }
 </style>

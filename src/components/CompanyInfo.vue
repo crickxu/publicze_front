@@ -6,7 +6,7 @@
                <div class="_layer left"></div>
             </div>
           </el-col>
-          <el-col :span="18">
+          <el-col :span="19">
             <div class="top">
                 <img class="info logo"/>
                 <label class="info label company">{{ companyinfo.name }}</label>
@@ -15,9 +15,9 @@
                 </el-input>
             </div>
             <div class="info_div">
-                <el-row>
+                <el-row class="heard row">
                   <el-col :span="20">
-                    <div class="left_info">
+                    <div class="heard info">
                         
                         <span class="info span">
                           <label class="info label code title">统一信用代码:</label>
@@ -30,74 +30,70 @@
                     </div>
                   </el-col>
                   <el-col :span="4">
-                    <div>
+                    <div class="heard info">
                       <el-button type="text" class="contract button">在线联系</el-button>
                    </div>
                 </el-col>
-                </el-row>
-                             
+                </el-row>                          
             </div>
-            <div class="split"></div>
             <div class="main div">
-                <el-row>
-                  <el-col :span="14">
-                    <div class="main pic div">
+                <el-row class="main row">
+                  <el-col :span="16" class="main col left">
+                    <div class="main info">
+                      <div class="main pic div">
                         <img class="main img" :src="companyinfo.imgPath"/>
-                    </div>
-                    
-                  </el-col>
-                  <el-col :span="10">
-                    <div class="info left div">
+                      </div>
                       <div class="info content"> 
-                    <div class="info left div">
+                        <div class="info left div">
                         <label>地址：{{companyinfo.contact}}</label>
-                      </div>
-                      <div class="info left div">
+                        </div>
+                        <div class="info left div">
                         <label>号码：{{companyinfo.mobileNum}}</label>
-                      </div>
-                      <div class="info left div">
+                        </div>
+                        <div class="info left div">
                         <label>规模：{{ companyinfo.scale }}</label>
-                      </div>
-                      <div class="info left div">
+                        </div>
+                        <div class="info left div">
                         <label>行业：{{ companyinfo.subIndustryName}}</label>
-                      </div>
-                      <div class="info left div">
+                        </div>
+                        <div class="info left div">
                         <label>二级行业：{{companyinfo.thrIndustryName}}</label>
+                        </div>
                       </div>
                     </div>
+                    <div class="com info">
+                      <div class="com desc div">
+                        <span>企业介绍</span>
+                      </div>
+                      <div class="desc info">
+                         <p>{{companyinfo.introduction}}</p> 
+                      </div>
+                      <div class="com desc div">
+                        <span>产品信息</span>
+                      </div>
+                      <div>
+                        <div class="div proinfo" v-for="(picinfo, index) in picinfos" :key="index">
+                          <cpic :file_img="picinfo.fileid" :bigsrc="picinfo.filepath[0]" :srcpaths="picinfo.filepath" :ptitle="picinfo.filename" :params="picinfo.fileparams"></cpic>
+                        </div>
+                      </div>
                     </div>
                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24">
-                    <div class="div titleinfo">
-                    <span>企业介绍</span>
-                    </div>
-                        <p>{{companyinfo.introduction}}</p>
+                  <el-col :span="8">
+                    <div class="right content"></div>
                   </el-col>
                 </el-row>
-            </div>
-            <div class="div titleinfo">
-                <span class="span titleinfo">产品图片</span>
-              </div>
-              <div class="div imgsorvideos">
-                <div class="div img">
-                  <div v-for="(picinfo, index) in picinfos" :key="index">
-                  <cpic :file_img="picinfo.fileid" :srcpath="picinfo.filepath" :ptitle="picinfo.filetitle"></cpic>
-                </div>
-                </div>
-              </div>
-              <div class="div titleinfo">
-                <span>产品视频</span>
-              </div>
-              <div class="div imgsorvideos">
-                <div v-for="(videoinfo, index) in videoinfos" :key="index">
-                  <cvid file_img="videoinfo.fileid" :srcpath="videoinfo.filepath" :ptitle="videoinfo.filetitle"></cvid>
-              </div>
-            </div>           
+            </div>                
           </el-col>
-          <el-col :span="3"></el-col>
+          <el-col :span="2"></el-col>          
         </el-row>
+        <div class="footer_">
+          <div class="footer left">
+            <label>Copyright 异度空间(武汉)信息技术有限公司, All Rights Reserved</label>
+          </div>
+          <div class="footer right">
+            <img src="../img/gongan.png"><label>鄂ICP备2025112386号-1</label>
+          </div>
+        </div>
     </div>
 </template>
 <script>
@@ -140,6 +136,8 @@
           videoTitle: '',
           discription: ''
         },
+        server_addr: 'http://111.230.49.63:30104',
+        //server_addr: 'http://localhost:8093',
         videoinfos: [],
         picinfos: [],
       }
@@ -150,7 +148,7 @@
       {
         axios({
                  method: "get",
-                 url: "http://localhost:8093/company/getCompanyByNo",
+                 url: this.server_addr+"/company/getCompanyByNo",
                  params: {
                    companyNo: this.$route.query.companyNo,
                 },
@@ -167,7 +165,7 @@
                       this.companyinfo.provinceAddr =company.provinceAddr;
                       this.companyinfo.cityAddr = company.cityAddr;
                       this.companyinfo.contact = company.contact;
-                      this.companyinfo.imgPath ="http://192.168.10.139/"+company.imgPath;
+                      this.companyinfo.imgPath =company.imgPath;
                       this.companyinfo.introduction =company.introduction;
                       this.companyinfo.mobileNum =company.mobileNum;
                       this.companyinfo.eventType =company.eventType;
@@ -181,7 +179,7 @@
                   
                   axios({
                     method: "get",
-                    url: "http://localhost:8093/file/filesInfo",
+                    url: this.server_addr + "/file/filesInfo",
                     params: {
                        companyNo: this.$route.query.companyNo,
                     },
@@ -191,14 +189,25 @@
                     {
                       let info ={
                         fileid :response.data[i].companyNo+response.data[i].id,
-                        filetitle : response.data[i].title,
-                        filepath:response.data[i].filePath
+                        //filetitle : response.data[i].title,
+                        filepath: response.data[i].filePaths,
+                        filename: response.data[i].title,
+                        fileparams: response.data[i].proparams
 
                       }
-                      if(response.data[i].fileType==0&&!response.data[i].isMainImg)
-                        this.picinfos.push(info);
+                      if(response.data[i].isMainImg)
+                      {
+                         this.companyinfo.imgPath = info.filepath
+                      }
                       else
-                        this.videoinfos.push(info);
+                      {
+                         if(response.data[i].fileType==0)
+                         {
+                           this.picinfos.push(info);
+                         }
+                         else 
+                            this.videoinfos.push(info);
+                      }
                     }
                   })
                 
@@ -215,6 +224,59 @@
   }
 </script>
 <style>
+  template
+  {
+    height: 100%;
+  }
+  .com.info
+  {
+    display: flex;
+    flex-direction: column;
+  }
+  .heard.row
+  {
+    position: relative;
+    bottom: 15px;
+  }
+  .main.row
+  {
+    display: flex;
+    margin-top: 15px;
+    /*margin-bottom: 15px; */
+    width: 100%;
+  }
+  .main.col
+  {
+    padding: 0px;
+    /*background-color:  white; */
+  }
+  .main.col.left
+  {
+    width: 100%;
+  }
+  .info.row
+  {
+    display: flex;
+  }
+  .right.content
+  {
+    /*width: 280px;*/
+    /*flex-grow: 1;*/
+    height: 100%;
+    margin-left: 15px;
+    background-color: white;
+  }
+  .desc.info
+  {
+    font-family: STXihei;
+    font-size: 18px;
+    text-align: left;
+    text-indent: 2em;
+    line-height: 2.5;
+    border-width: 2px;
+    border-color: aliceblue;
+    background-color: white;
+  }
   .intro.img
   { 
     width: 250px;
@@ -234,44 +296,44 @@
     right: 10px;
     background-color: aliceblue;
   }
-  .left_info
-  {
-    position: relative;
-  }
   .info.content
   {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    font-family: STXihei;
+    margin-left: 8px;
   }
-  .div.imgsorvideos
+  .div.proinfo
   {
-     display: flex;
-     flex-direction: row;
-     align-items: flex-start;
+    margin-top: 10px;
+    background-color: white;
+    /*border-style: solid;
+    border-width: 2px;
+    border-color: rgb(214, 232, 236); 
+    /*margin-left: 50px;*/
   }
-  .div.img
+  .div.viewcontent
   {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    height: 235px;
+    flex-direction: column; 
+    /*justify-content: center;*/
   }
   .lab.dis
   {
     color: brown;
   }
-  .div.titleinfo
+  .com.desc.div
   {
     height: 40px;
     font-size: 20px;
-    background-color: cadetblue;
+    background-color: rgba(170, 195, 231, 0.808);
   }
   .info
   {
     position:relative;
     float: left;
-    font-family:'Times New Roman', Times, serif;
+    /*font-family:'Times New Roman', Times, serif;*/
     font-size:small;
   }
   .info.logo
@@ -296,28 +358,27 @@
     padding-bottom: 4px;
     background-color:rgb(227, 238, 240);
   }
-  .main.div
+  .main.info
   {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     background-color: white;
+    margin-bottom: 15px;
+    width: 100%;
   }
   .main.img
   {
-    width: 550px;
-    height: 380px;
-  }
-  .text.comany-introduction
-  {
-    width: 500px;
-    height: 200px;
-    margin-top: 0px;
-    font-size: x-large;
-    color: brown;
+    width: 450px;
+    height: 350px;
+    margin: 0px;
   }
   .info.left
   {
     font-size:16px;
-    margin-top: 25px;
+    margin-top: 20px;
   }
+  
   .info.nature
   {
      left:60px;
@@ -350,12 +411,10 @@
   .body
   {
     width: 100%;
-    background-color: rgb(245, 246, 247);
+    height: 100%;
+    background-color: rgb(228, 231, 233);
   }
-  .left_r
-  {
-    height: 60px;
-  }
+  
   .top
   {
     position: relative;
@@ -365,13 +424,38 @@
   }
   .info_div
   {
-    height: 70px;
+    justify-items: center;
+    height: 50px;
     width: 100%;
     border-radius: 12px;
     background-color:white;
   }
-  .split
+  .left_r
   {
-    height: 20px;
+    height: 10px;
   }
+  .footer_
+    {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      color: white;
+        overflow: hidden;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        position: static;
+        background-color:rgb(101, 103, 105);
+        height: 80px;
+    }
+    .footer.left
+    {
+      position: relative;
+      left: -80px;
+      width: 60%;
+    }
+    .footer.right
+    {
+       width: 40%;
+    }
 </style>
